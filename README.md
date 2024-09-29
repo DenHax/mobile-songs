@@ -2,6 +2,6 @@
 
 Service start:
 
-```bash
+```sh
 go run cmd/lib/main.go
 ```

@@ -11,6 +11,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/DenHax/mobile-songs/internal/config"
 )
 
 type Song struct {
@@ -66,6 +67,18 @@ func createSong(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(song)
 }
+func router(w http.ResponseWriter, r *http.Request) {
+	switch r.URL.Path {
+	case "/songs":
+		http.HandleFunc("/songs", createSong)
+	case "/songs/":
+		http.HandleFunc("/songs/", getSong)
+	case "/songs/list":
+		http.HandleFunc("/songs/list", getSongs)
+	default:
+		http.NotFound(w, r)
+	}
+}
 
 func main() {
 
@@ -75,9 +88,6 @@ func main() {
 	// TODO: storage
 	// TODO: server
 
-	http.HandleFunc("/songs", createSong)
-	http.HandleFunc("/songs/", getSong)
-	http.HandleFunc("/songs/list", getSongs)
 
 	http.ListenAndServe(":8080", nil)
 }

@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/DenHax/mobile-songs/internal/config"
+	"github.com/DenHax/mobile-songs/internal/storage"
 )
 
 type Song struct {
@@ -119,6 +120,11 @@ func main() {
 	)
 
 	// TODO: storage
+	storage, err := storage.New(cfg.Storage.URL)
+	if err != nil {
+		log.Error("failed to init storage", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
 	// TODO: server
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)

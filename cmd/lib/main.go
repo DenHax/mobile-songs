@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -22,6 +22,12 @@ type Song struct {
 var (
 	songs = make(map[string]Song)
 	mu    sync.Mutex
+)
+
+const (
+	envLocal = "local"
+	envDev   = "dev"
+	envProd  = "prod"
 )
 
 func getSongs(w http.ResponseWriter, r *http.Request) {
@@ -80,16 +86,45 @@ func router(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func setupLogger(env string) *slog.Logger {
+	var log *slog.Logger
+
+	switch env {
+	case envLocal:
+		log = slog.New(
+			slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}),
+		)
+	case envDev:
+		log = slog.New(
+			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}),
+		)
+	case envProd:
+		log = slog.New(
+			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}),
+		)
+	}
+
+	return log
+}
+
 func main() {
 
 	// TODO: config
 	cfg := config.MustLoad()
 	// TODO: logger
+	log := setupLogger(cfg.Logger.Env)
+	log.Info(
+		"start logger in",
+		slog.String("env", cfg.Logger.Env),
+	)
+
 	// TODO: storage
 	// TODO: server
-
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	log.Info("starting server", slog.String("address", cfg.Server.Address))
+
 	srv := &http.Server{
 		Addr:         cfg.Server.Address,
 		Handler:      http.HandlerFunc(router),
@@ -97,23 +132,21 @@ func main() {
 		WriteTimeout: cfg.Server.WriteTimeout,
 	}
 	go func() {
-		fmt.Println("run")
 		if err := srv.ListenAndServe(); err != nil {
-			fmt.Println("failed to start server")
+			log.Error("failed to stop server", slog.String("error", err.Error()))
 		}
 	}()
 
-	fmt.Println("server started")
+	log.Info("server started")
 
 	<-done
-	fmt.Println("stopping server")
+	log.Info("stopping server")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	if err := srv.Shutdown(ctx); err != nil {
-		fmt.Println("failed to stop server", err)
-
+		log.Error("failed to stop server", slog.String("error", err.Error()))
 		return
 	}
 }

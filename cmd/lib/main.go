@@ -88,6 +88,8 @@ func main() {
 	// TODO: storage
 	// TODO: server
 
+	done := make(chan os.Signal, 1)
+	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	srv := &http.Server{
 		Addr:         cfg.Server.Address,
 		Handler:      http.HandlerFunc(router),
@@ -101,5 +103,17 @@ func main() {
 		}
 	}()
 
-	http.ListenAndServe(":8080", nil)
+	fmt.Println("server started")
+
+	<-done
+	fmt.Println("stopping server")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		fmt.Println("failed to stop server", err)
+
+		return
+	}
 }

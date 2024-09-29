@@ -1,9 +1,16 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"os"
+	"os/signal"
 	"sync"
+	"syscall"
+	"time"
+
 )
 
 type Song struct {

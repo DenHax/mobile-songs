@@ -17,12 +17,47 @@ var (
 )
 
 func getSongs(w http.ResponseWriter, r *http.Request) {
-func getSong(w http.ResponseWriter, r *http.Request) {
+	mu.Lock()
+	defer mu.Unlock()
+
+	var songList []Song
+	for _, song := range songs {
+		songList = append(songList, song)
+	}
+
 	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(songList)
+}
+
+func getSong(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Path[len("/songs/"):]
+
+	mu.Lock()
+	song, exists := songs[id]
+	mu.Unlock()
+
+	if !exists {
+		http.Error(w, "Song not found", http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(song)
 }
 
 func createSong(w http.ResponseWriter, r *http.Request) {
+	var song Song
+	if err := json.NewDecoder(r.Body).Decode(&song); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
+
+	mu.Lock()
+	songs[song.Song] = song // Используем название песни как ключ
+	mu.Unlock()
+
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(song)
 }
 
 func main() {

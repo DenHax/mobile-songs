@@ -88,6 +88,18 @@ func main() {
 	// TODO: storage
 	// TODO: server
 
+	srv := &http.Server{
+		Addr:         cfg.Server.Address,
+		Handler:      http.HandlerFunc(router),
+		ReadTimeout:  cfg.Server.ReadTimeout,
+		WriteTimeout: cfg.Server.WriteTimeout,
+	}
+	go func() {
+		fmt.Println("run")
+		if err := srv.ListenAndServe(); err != nil {
+			fmt.Println("failed to start server")
+		}
+	}()
 
 	http.ListenAndServe(":8080", nil)
 }

@@ -12,7 +12,7 @@ type Song struct {
 }
 
 var (
-	songs = make(map[string]Song) // Используем ID песни как ключ
+	songs = make(map[string]Song)
 	mu    sync.Mutex
 )
 
@@ -53,7 +53,7 @@ func createSong(w http.ResponseWriter, r *http.Request) {
 	}
 
 	mu.Lock()
-	songs[song.Song] = song // Используем название песни как ключ
+	songs[song.Song] = song
 	mu.Unlock()
 
 	w.WriteHeader(http.StatusCreated)

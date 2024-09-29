@@ -2,4 +2,7 @@ all:
 	run-serv
 
 run-serv:
-	. script/run-serv.sh
+	CONFIG_PATH=${CONFIG_PATH} . script/run-serv.sh
+
+auto-start:
+	. script/autostart.sh

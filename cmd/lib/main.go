@@ -61,6 +61,13 @@ func createSong(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
+	// TODO: config
+	cfg := config.MustLoad()
+	// TODO: logger
+	// TODO: storage
+	// TODO: server
+
 	http.HandleFunc("/songs", createSong)
 	http.HandleFunc("/songs/", getSong)
 	http.HandleFunc("/songs/list", getSongs)

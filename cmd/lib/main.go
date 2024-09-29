@@ -1,9 +1,19 @@
 package main
 
 import (
+	"encoding/json"
 	"net/http"
+	"sync"
+)
 
+type Song struct {
+	Group string `json:"group"`
+	Song  string `json:"song"`
+}
 
+var (
+	songs = make(map[string]Song) // Используем ID песни как ключ
+	mu    sync.Mutex
 )
 
 func getSongs(w http.ResponseWriter, r *http.Request) {

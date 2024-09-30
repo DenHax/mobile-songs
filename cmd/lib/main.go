@@ -125,6 +125,11 @@ func main() {
 		log.Error("failed to init storage", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
+
+	// TODO: auth
+	// TODO: auth-session
+	// TODO: repository
+	// TODO: server (api | handler)
 	// TODO: server
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)

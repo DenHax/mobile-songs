@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-go run cmd/lib/main.go
+CONFIG_PATH=${CONFIG_PATH} go run cmd/lib/main.go

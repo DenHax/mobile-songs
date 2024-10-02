@@ -1,9 +1,9 @@
-package repo
+package service
 
 import (
 	"github.com/DenHax/mobile-songs/internal/domain/models"
-	"github.com/DenHax/mobile-songs/internal/repo/postgres/song"
-	"github.com/DenHax/mobile-songs/internal/storage"
+	"github.com/DenHax/mobile-songs/internal/repo"
+	"github.com/DenHax/mobile-songs/internal/service/song"
 )
 
 type Song interface {
@@ -19,14 +19,14 @@ type SongsList interface {
 	Update(id int, update models.SongsList) error
 }
 
-type Repository struct {
+type Service struct {
 	Song
 	SongsList
 }
 
-func NewRepository(s *storage.Storage) *Repository {
-	return &Repository{
-		Song:      song.NewSongPsql(s),
-		SongsList: song.NewSongsListPsql(s),
+func NewService(repos *repo.Repository) *Service {
+	return &Service{
+		Song:      song.NewSongService(repos.Song, repos.SongsList),
+		SongsList: song.NewSongsListService(repos.SongsList),
 	}
 }

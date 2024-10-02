@@ -1,17 +1,16 @@
 package song
 
 import (
-	"database/sql"
-
 	"github.com/DenHax/mobile-songs/internal/domain/models"
+	"github.com/DenHax/mobile-songs/internal/storage"
 )
 
 type SongPsql struct {
-	db *sql.DB
+	storage *storage.Storage
 }
 
-func NewSongPsql(db *sql.DB) *SongPsql {
-	return &SongPsql{db: db}
+func NewSongPsql(s *storage.Storage) *SongPsql {
+	return &SongPsql{storage: s}
 }
 
 func (r SongPsql) Song(id int) (models.Song, error) {

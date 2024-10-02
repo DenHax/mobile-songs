@@ -49,7 +49,7 @@
                 # Main service language
                 languages.go = {
                   enable = true;
-                  package = pkgs.go_1_21;
+                  package = pkgs.go_1_22;
                 };
 
                 # Main database

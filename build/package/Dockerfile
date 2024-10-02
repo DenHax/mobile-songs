@@ -10,11 +10,11 @@ RUN go mod download
 
 COPY ./ ./
 
-RUN go build -o ./bin/lib ./cmd/lib/main.go
+RUN go build -o ./bin/song ./cmd/lib/main.go
 
 FROM alpine:3.20 AS runner
 
-COPY --from=builder /usr/local/src/bin/lib /
+COPY --from=builder /usr/local/src/bin/song /
 
 RUN apk add --no-cache ca-certificates
 
@@ -22,4 +22,4 @@ COPY ./configs/config.yaml /config.yaml
 
 ENV CONFIG_PATH  /config.yaml
 
-CMD ["/lib"]
+CMD ["/song"]

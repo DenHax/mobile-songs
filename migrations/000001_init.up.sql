@@ -1,0 +1,6 @@
+CREATE TABLE Song (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    song VARCHAR(255) NOT NULL,
+    group_name VARCHAR(255) NOT NULL,
+    lyrics TEXT
+);

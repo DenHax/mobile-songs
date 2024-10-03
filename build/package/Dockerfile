@@ -14,16 +14,18 @@ RUN go build -o ./bin/song ./cmd/lib/main.go
 
 FROM alpine:3.20 AS runner
 
-COPY --from=builder /usr/local/src/bin/song /
+RUN apk add --no-cache ca-certificates postgresql-client
 
-RUN apk add --no-cache ca-certificates
+COPY ./script/wait-storage.sh /
+
+RUN chmod +x wait-storage.sh
 
 COPY ./configs/config.yaml /config.yaml
 
 ENV CONFIG_PATH  /config.yaml
 
-COPY ./script/wait-storage.sh /
+COPY ./migrations /migrations
 
-RUN chmod +x wait-storage.sh
+COPY --from=builder /usr/local/src/bin/song /
 
 CMD ["/song"]

@@ -9,4 +9,9 @@ run-compose:
 
 auto-start:
 	. script/autostart.sh
+	. script/psql_start.sh
+	@$(MAKE) run-serv
+
+auto-start-compose:
+	. script/autostart-compose.sh
 	@$(MAKE) run-compose

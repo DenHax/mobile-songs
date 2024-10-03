@@ -11,3 +11,4 @@ server:
 
 postgres:
   ssl_mode: disable
+  migration_path: ./migrations

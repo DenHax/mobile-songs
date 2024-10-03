@@ -14,8 +14,7 @@ type Storage struct {
 func New(connUrl string) (*Storage, error) {
 	const op = "storage.postgres.New"
 
-	connection := connUrl
-	db, err := sql.Open("postgres", connection)
+	db, err := sql.Open("postgres", connUrl)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}

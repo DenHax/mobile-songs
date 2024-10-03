@@ -13,20 +13,12 @@ type Song interface {
 	Update(id int, update models.UpdateSong) error
 }
 
-type SongsList interface {
-	SongList(id int) (models.SongsList, error)
-	Create(list models.SongsList) (int, error)
-	Update(id int, update models.SongsList) error
-}
-
 type Service struct {
 	Song
-	SongsList
 }
 
 func NewService(repos *repo.Repository) *Service {
 	return &Service{
-		Song:      song.NewSongService(repos.Song, repos.SongsList),
-		SongsList: song.NewSongsListService(repos.SongsList),
+		Song: song.NewSongService(repos.Song, repos.SongsList),
 	}
 }

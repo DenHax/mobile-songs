@@ -9,8 +9,9 @@ import (
 type Song interface {
 	Song(id int) (models.Song, error) // GET
 	Create(song models.Song) (int, error)
-	Delete(id int)
+	Delete(id int) error
 	Update(id int, update models.UpdateSong) error
+	GetAll() ([]models.Song, error)
 }
 
 type Repository struct {

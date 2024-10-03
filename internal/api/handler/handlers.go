@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	v1 "github.com/DenHax/mobile-songs/internal/api/v1"
+	"github.com/DenHax/mobile-songs/internal/middleware"
 	"github.com/DenHax/mobile-songs/internal/service"
 	"github.com/gorilla/mux"
 )
@@ -30,7 +31,7 @@ func (h *Handler) Init() *mux.Router {
 	r := mux.NewRouter()
 
 	api := r.PathPrefix("/api").Subrouter()
-	// api.Use(middleware.HeaderMiddleware)
+	api.Use(middleware.HeaderMiddleware)
 	api = v1.NewApi(api)
 	return r
 }

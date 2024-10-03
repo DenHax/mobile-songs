@@ -6,12 +6,11 @@ import (
 )
 
 type SongService struct {
-	repo     repo.Song
-	listRepo repo.SongsList
+	repo repo.Song
 }
 
-func NewSongService(repo repo.Song, listRepo repo.SongsList) *SongService {
-	return &SongService{repo: repo, listRepo: listRepo}
+func NewSongService(repo repo.Song) *SongService {
+	return &SongService{repo: repo}
 }
 
 func (s *SongService) Song(id int) (models.Song, error) {

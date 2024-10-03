@@ -19,6 +19,6 @@ type Service struct {
 
 func NewService(repos *repo.Repository) *Service {
 	return &Service{
-		Song: song.NewSongService(repos.Song, repos.SongsList),
+		Song: song.NewSongService(repos.Song),
 	}
 }

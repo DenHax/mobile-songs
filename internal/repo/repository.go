@@ -13,20 +13,12 @@ type Song interface {
 	Update(id int, update models.UpdateSong) error
 }
 
-type SongsList interface {
-	SongList(id int) (models.SongsList, error)
-	Create(list models.SongsList) (int, error)
-	Update(id int, update models.SongsList) error
-}
-
 type Repository struct {
 	Song
-	SongsList
 }
 
 func NewRepository(s *storage.Storage) *Repository {
 	return &Repository{
-		Song:      song.NewSongPsql(s),
-		SongsList: song.NewSongsListPsql(s),
+		Song: song.NewSongPsql(s),
 	}
 }

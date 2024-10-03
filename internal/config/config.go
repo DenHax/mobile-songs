@@ -23,7 +23,7 @@ type ServerConfig struct {
 
 type Postgres struct {
 	URL           string `env:"POSTGRES_URL"`
-	SSLMode       string `env:"ssl_mode"`
+	SSLMode       string `env:"SSL_MODE"`
 	MigrationPath string `yaml:"migration_path"`
 }
 

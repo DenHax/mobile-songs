@@ -56,6 +56,8 @@ func main() {
 		slog.String("env", cfg.Logger.Env),
 	)
 
+	log.Debug("storage", cfg.Storage)
+	log.Debug("server", cfg.Server)
 	migrations.Migrate(cfg.Storage.URL, cfg.Storage.MigrationPath, log)
 
 	storage, err := storage.New(cfg.Storage.URL)

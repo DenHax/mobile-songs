@@ -8,6 +8,7 @@ import (
 	"syscall"
 	"time"
 
+	migrations "github.com/DenHax/mobile-songs/cmd/migrate"
 	"github.com/DenHax/mobile-songs/internal/api/handler"
 	"github.com/DenHax/mobile-songs/internal/config"
 	"github.com/DenHax/mobile-songs/internal/repo"
@@ -54,6 +55,8 @@ func main() {
 		"start logger in",
 		slog.String("env", cfg.Logger.Env),
 	)
+
+	migrations.Migrate(cfg.Storage.URL, cfg.Storage.MigrationPath, log)
 
 	storage, err := storage.New(cfg.Storage.URL)
 	if err != nil {

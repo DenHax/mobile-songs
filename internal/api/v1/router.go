@@ -11,7 +11,7 @@ func NewApi(r *mux.Router) *mux.Router {
 	songs := v1.PathPrefix("/songs").Subrouter()
 	songs.HandleFunc("/", handlers.CreateSong).Methods("POST")
 
-	songs.HandleFunc("/{id}", handlers.GetSongs).Methods("GET")
-	songs.HandleFunc("/list", handlers.GetSongs).Methods("GET")
+	songs.HandleFunc("/{id}", handlers.GetSong).Methods("GET")
+	songs.HandleFunc("/", handlers.GetAllSongs).Methods("GET")
 	return v1
 }

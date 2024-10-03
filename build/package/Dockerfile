@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine AS builder
+FROM golang:1.22-alpine AS builder
 
 WORKDIR /usr/local/src
 
@@ -21,5 +21,9 @@ RUN apk add --no-cache ca-certificates
 COPY ./configs/config.yaml /config.yaml
 
 ENV CONFIG_PATH  /config.yaml
+
+COPY ./script/wait-storage.sh /
+
+RUN chmod +x wait-storage.sh
 
 CMD ["/song"]
